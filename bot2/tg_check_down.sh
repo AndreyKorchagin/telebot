@@ -15,5 +15,5 @@ fi
 if [[ $status = 0 ]]
 then
 	sh /root/telebot/bot2/start &
-	echo "bot restart `date`" >> /root/telebot/bot2/log_bown
+	echo "bot restart `date`" >> /root/telebot/bot2/log_down
 fi
