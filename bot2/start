@@ -1,0 +1,7 @@
+#!/bin/sh
+echo -e "bot start \t`date`" >> /root/telebot/bot2/log
+source /root/telebot/bot2/BOT/bin/activate
+echo -e "source on \t`date`" >> /root/telebot/bot2/log
+echo -e "bot run \t`date`" >> /root/telebot/bot2/log
+python /root/telebot/bot2/bot2.py
+echo -e "bot stop \t`date`" >> /root/telebot/bot2/log

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/root/telebot/managment/en_block
+
+at -f /root/telebot/managment/en_block now + $1 $2

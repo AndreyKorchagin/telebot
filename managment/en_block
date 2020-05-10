@@ -1,0 +1,3 @@
+#!/bin/sh
+python /root/telebot/bot2/on_off.py
+/etc/init.d/firewall reload
