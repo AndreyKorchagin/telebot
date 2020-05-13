@@ -1,4 +1,4 @@
-#!/Users/andreykorchagin/Desktop/Git/telebot/bot2/BOT/bin/python
+#!/root/telebot/bot2/BOT/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

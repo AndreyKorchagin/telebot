@@ -46,7 +46,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV='/Users/andreykorchagin/Desktop/Git/telebot/bot2/BOT'
+VIRTUAL_ENV='/root/telebot/bot2/BOT'
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
