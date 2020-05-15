@@ -9,6 +9,7 @@ import on_off as on
 import user_action as ua
 import binascii
 import re
+from datetime import datetime
 
 time = 0;
 admin_id = "139050906"
@@ -43,7 +44,9 @@ help_str_auth = u'/help - Список функций\n\
 /start - Авторизация\n\
 /inet_on - Включить интернет\n\
 /inet_off - Отключить интернет\n\
-/ssh_add_pub_key - Добавить публичный ключ для ssh\n'
+/ssh_add_pub_key - Добавить публичный ключ для ssh\n\
+/status - Узнать статутс интернета\n\
+/time_left - Узнать отсаток времени\n'
 
 help_str = u'Вы не авторизованы!!!\n/start - Авторизация\n'
 help_str_root = u'/help - Список функций\n\
@@ -52,7 +55,9 @@ help_str_root = u'/help - Список функций\n\
 /inet_off - Отключить интернет\n\
 /list - Вывод списка пользователей\n\
 /del_user - Удалить пользователй\n\
-/ssh_add_pub_key - Добавить публичный ключ для ssh\n'
+/ssh_add_pub_key - Добавить публичный ключ для ssh\n\
+/status - Узнать статутс интернета\n\
+/time_left - Узнать отсаток времени\n'
 
 
 @bot.message_handler(commands=['help'])
@@ -64,6 +69,7 @@ def process_help_command(message):
     else:
     	bot.send_message(message.from_user.id, text = help_str)
 
+
 @bot.message_handler(commands=['list'])
 def process_help_command(message):
     if message.from_user.id == int(admin_id):
@@ -74,12 +80,26 @@ def process_help_command(message):
     else:
     	bot.send_message(message.from_user.id, text = u'Вы не root!!!')
 
+
+@bot.message_handler(commands=['status'])
+def process_help_command(message):
+    if access(message):
+    	check = on.check(0)
+    	if check == 0:
+    		bot.send_message(message.from_user.id, 'Интернет включен')
+    	else:
+    		bot.send_message(message.from_user.id, 'Интернет выключен')
+    else:
+    	bot.send_message(message.from_user.id, text = u'Вы не авторизованы!!!')
+
+
 @bot.message_handler(commands=['ssh_add_pub_key'])
 def process_help_command(message):
 	if access(message):
 			bot.send_message(message.from_user.id, text = u'Скопируйте ваш публичный ключ, затем вставьте сюда и поставьте вначале "/"')
 	else:
 		bot.send_message(message.from_user.id, text = u'Вы не авторизованы!!!')
+
 
 @bot.message_handler(commands=['ssh-rsa'])
 def process_help_command(message):
@@ -96,6 +116,7 @@ def process_help_command(message):
 	else:
 		bot.send_message(message.from_user.id, text = u'Вы не авторизованы!!!')
 
+
 @bot.message_handler(commands=['inet_on'])
 def process_start_command(message):
 	if access(message):
@@ -106,8 +127,7 @@ def process_start_command(message):
 @bot.message_handler(commands=['inet_off'])
 def process_help_command(message):
 	if access(message):
-		status = on.check(0)
-		if status == 0:
+		if on.check(0) == 0:
 			bot.send_message(message.from_user.id, text = u'Интернет принудительно выключен')
 			os.system("/bin/sh /root/telebot/managment/en_block")
 			atq = "atq | awk '{print $1}'"
@@ -131,6 +151,24 @@ def process_help_command(message):
 	else:
 		bot.send_message(message.from_user.id, text = u'Пшел отсюда!!!')
 
+
+@bot.message_handler(commands=['time_left'])
+def process_help_command(message):
+	if access(message):
+		if on.check(0) == 0:
+			format = '%H:%M:%S'
+			time = os.popen("atq | awk '{print $5}'").read()
+			date = os.popen("date | awk '{print $4}'").read()
+			stop = datetime.strptime(time.strip('\n'), format)
+			start = datetime.strptime(date.strip('\n'), format)
+			delta = stop - start
+			bot.send_message(message.from_user.id, u'Интернет выключиться через %s' % (delta))
+		else:
+			bot.send_message(message.from_user.id, u'Интернет выключен')
+	else:
+		bot.send_message(message.from_user.id, text = u'Вы не авторизованы.')
+
+
 @bot.message_handler()
 def process_digt_command(message):
 	if access(message):
@@ -143,6 +181,7 @@ def process_digt_command(message):
 	else:
 		bot.send_message(message.from_user.id, text = u'Вы не авторизованы.')
 
+
 @bot.callback_query_handler(lambda call: True)
 def callback_worker(call):
 	global new_user_id
@@ -154,32 +193,40 @@ def callback_worker(call):
 				bot.send_message(call.from_user.id, u'Интернет уже включен!')
 			else:
 				bot.send_message(call.from_user.id, u'Интернет будет включен на 1 час')
+				bot.send_message(admin_id, u'Пользователь %s включил интернет на 1 час' % (call.from_user.first_name))
 				os.system("/bin/sh /root/telebot/managment/block 1 hours")
 		elif call.data == '2hour':
 			if check == 0:
 				bot.send_message(call.from_user.id, u'Интернет уже включен!')
 			else:
 				bot.send_message(call.from_user.id, u'Интернет будет включен на 2 часа')
+				bot.send_message(admin_id, u'Пользователь %s включил интернет на 2 часa' % (call.from_user.first_name))
 				os.system("/bin/sh /root/telebot/managment/block 2 hours")
 		elif call.data == '3hour':
 			if check == 0:
 				bot.send_message(call.from_user.id, u'Интернет уже включен!')
 			else:
 				bot.send_message(call.from_user.id, u'Интернет будет включен на 3 часа')
+				bot.send_message(admin_id, u'Пользователь %s включил интернет на 3 час' % (call.from_user.first_name))
 				os.system("/bin/sh /root/telebot/managment/block 3 hours")
 		elif call.data == 'other':
-			bot.send_message(call.from_user.id, u'Введите число')
+			if check == 0:
+				bot.send_message(call.from_user.id, u'Интернет уже включен!')
+			else:
+				bot.send_message(call.from_user.id, u'Введите число')
 		elif call.data == 'minutes':
 			if check == 0:
 				bot.send_message(call.from_user.id, u'Интернет уже включен!')
 			else:
 				bot.send_message(call.from_user.id, u'Интернет будет включен на ' + str(time) + u' минут(ы)')
+				bot.send_message(admin_id, u'Пользователь %s включил интернет на %d минут(ы)' % (call.from_user.first_name, time))
 				os.system("/bin/sh /root/telebot/managment/block " + str(time) + "minutes")
 		elif call.data == 'hours':
 			if check == 0:
 				bot.send_message(call.from_user.id, u'Интернет уже включен!')
 			else:
-				bot.send_message(call.from_user.id, u'Интернет будет включен на ' + str(time) + u' Часа(ов)')
+				bot.send_message(call.from_user.id, u'Интернет будет включен на ' + str(time) + u' часа(ов)')
+				bot.send_message(admin_id, u'Пользователь %s включил интернет на %d часа(ов)' % (call.from_user.first_name, time))
 				os.system("/bin/sh /root/telebot/managment/block " + str(time) + "hours")
 		elif call.data.split(' ')[0] == 'add_approve':
 			ua.add_user(str(call.data.split(' ')[1]), call.data.split(' ')[2])
