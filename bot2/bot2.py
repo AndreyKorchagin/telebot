@@ -221,13 +221,17 @@ def callback_worker(call):
 				bot.send_message(call.from_user.id, u'Интернет будет включен на ' + str(time) + u' минут(ы)')
 				bot.send_message(admin_id, u'Пользователь %s включил интернет на %d минут(ы)' % (call.from_user.first_name, time))
 				os.system("/bin/sh /root/telebot/managment/block " + str(time) + "minutes")
+
 		elif call.data == 'hours':
 			if check == 0:
 				bot.send_message(call.from_user.id, u'Интернет уже включен!')
 			else:
-				bot.send_message(call.from_user.id, u'Интернет будет включен на ' + str(time) + u' часа(ов)')
-				bot.send_message(admin_id, u'Пользователь %s включил интернет на %d часа(ов)' % (call.from_user.first_name, time))
-				os.system("/bin/sh /root/telebot/managment/block " + str(time) + "hours")
+				if time >= 24:
+					bot.send_message(call.from_user.id, u'Интернет нельзя включить больше чем на 24 часа')
+				else:
+					bot.send_message(call.from_user.id, u'Интернет будет включен на ' + str(time) + u' часа(ов)')
+					bot.send_message(admin_id, u'Пользователь %s включил интернет на %d часа(ов)' % (call.from_user.first_name, time))
+					os.system("/bin/sh /root/telebot/managment/block " + str(time) + "hours")
 		elif call.data.split(' ')[0] == 'add_approve':
 			ua.add_user(str(call.data.split(' ')[1]), call.data.split(' ')[2])
 			bot.send_message(call.data.split(' ')[1], u'Доступ предоставлен!!!')
