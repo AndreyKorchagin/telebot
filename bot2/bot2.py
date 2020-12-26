@@ -57,7 +57,8 @@ help_str_root = u'/help - Список функций\n\
 /del_user - Удалить пользователй\n\
 /ssh_add_pub_key - Добавить публичный ключ для ssh\n\
 /status - Узнать статутс интернета\n\
-/time_left - Узнать отсаток времени\n'
+/time_left - Узнать отсаток времени\n\
+/clients_list - Список подключенных клиентов\n'
 
 
 @bot.message_handler(commands=['help'])
@@ -167,6 +168,28 @@ def process_help_command(message):
 			bot.send_message(message.from_user.id, u'Интернет выключен')
 	else:
 		bot.send_message(message.from_user.id, text = u'Вы не авторизованы.')
+
+@bot.message_handler(commands=['clients_list'])
+def process_get_network_clients_list_commadn(message):
+	if message.from_user.id == int(admin_id):
+
+		bot.send_message(message.from_user.id, text = u'Вы в root!!!')
+
+		dhcp = os.popen("cat /tmp/dhcp.leases").read().split("\n")[:-1]
+		dhcp_list = []
+
+		for item in dhcp:
+			dhcp_list.append(item.split(" ")[1:4])
+
+		string = u'Список подключенных пользователей:\n'
+
+		for item in dhcp_list:
+			string = u'%s%s - %s - %s\n' % (string, item[0], item[1], item[2])
+
+		bot.send_message(message.from_user.id, text = string)
+
+	else:
+		bot.send_message(message.from_user.id, text = u'Пшел отсюда!!!')
 
 
 @bot.message_handler()
