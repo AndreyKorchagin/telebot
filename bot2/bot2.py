@@ -10,6 +10,7 @@ import user_action as ua
 import binascii
 import re
 from datetime import datetime
+import edit_firewall as ef
 
 time = 0;
 admin_id = "139050906"
@@ -58,7 +59,11 @@ help_str_root = u'/help - Список функций\n\
 /ssh_add_pub_key - Добавить публичный ключ для ssh\n\
 /status - Узнать статутс интернета\n\
 /time_left - Узнать отсаток времени\n\
-/clients_list - Список подключенных клиентов\n'
+/clients_list - Список подключенных клиентов\n\
+/black_list - Список наказанных пользователей\n\
+/add_user_black_list - Добавляет засранца в список наказанных пользователей\n\
+/delete_user_black_list - Удаляет засранца из списка наказанных пользователей\n'
+
 
 
 @bot.message_handler(commands=['help'])
@@ -175,18 +180,77 @@ def process_get_network_clients_list_commadn(message):
 
 		bot.send_message(message.from_user.id, text = u'Вы в root!!!')
 
-		dhcp = os.popen("cat /tmp/dhcp.leases").read().split("\n")[:-1]
-		dhcp_list = []
-
-		for item in dhcp:
-			dhcp_list.append(item.split(" ")[1:4])
-
 		string = u'Список подключенных пользователей:\n'
 
-		for item in dhcp_list:
-			string = u'%s%s - %s - %s\n' % (string, item[0], item[1], item[2])
+		connectionsList = ef.getConnections()
+		for i in range(0, len(connectionsList)):
+			item = connectionsList[i]
+			string = u'%s%d. %s - %s - %s\n' % (string, i + 1, item[0].upper(), item[1], item[2])
 
 		bot.send_message(message.from_user.id, text = string)
+
+	else:
+		bot.send_message(message.from_user.id, text = u'Пшел отсюда!!!')
+
+@bot.message_handler(commands=['black_list'])
+def process_get_network_clients_list_commadn(message):
+	if message.from_user.id == int(admin_id):
+		bot.send_message(message.from_user.id, text = u'Вы в root!!!')
+
+		string = u'Список плохих пользователей:\n'
+
+		listMacsFromFirewall = ef.getListMacsFromFirewall("option name 'Gera'\n")
+		for i in range(0, len(listMacsFromFirewall)):
+			item = listMacsFromFirewall[i]
+			string = u'%s%d: %s\n' % (string, i + 1, item)
+		bot.send_message(message.from_user.id, text = string)
+	else:
+		bot.send_message(message.from_user.id, text = u'Пшел отсюда!!!')
+
+# @bot.message_handler(commands=['add_user_black_list'])
+# def process_get_network_clients_list_commadn(message):
+# 	if message.from_user.id == int(admin_id):
+# 		bot.send_message(message.from_user.id, text = u'Вы в root!!!')
+
+
+
+# 	else:
+# 		bot.send_message(message.from_user.id, text = u'Пшел отсюда!!!')
+
+
+@bot.message_handler(commands=['delete_user_black_list'])
+def process_get_network_clients_list_commadn(message):
+	if message.from_user.id == int(admin_id):
+		bot.send_message(message.from_user.id, text = u'Вы в root!!!')
+
+
+		list1 = ef.getConnections()
+		list2 = ef.getListMacsFromFirewall("option name 'Gera'\n")
+
+		print("1:")
+		print(list1)
+		print("2")
+		print(list2)
+
+
+		newList = []
+
+		for i in list1:
+			for j in list2:
+				if i[0].upper() == j:
+					newList.append(i)
+
+		print(newList)
+
+
+		# if not (ua.get_count_user()) == 0:
+		# listMacsFromFirewall = ef.getListMacsFromFirewall("option name 'Gera'\n")
+		listMacsFromFirewall = ef.getConnections()
+		bot.send_message(message.from_user.id, text = u'Вы в root!!!')
+		bot.send_message(message.from_user.id, text = u'Выберите пользователя котогрого хотите удалить!!!', reply_markup = kb.generate_buttons(len(newList), newList))
+
+		# else:
+			# bot.send_message(message.from_user.id, text = u'Список пользователей пуст!!!')
 
 	else:
 		bot.send_message(message.from_user.id, text = u'Пшел отсюда!!!')
