@@ -1,6 +1,6 @@
 #!/bin/sh
 python /root/telebot/bot2/on_off.py
 /etc/init.d/firewall reload
-ubus call hostapd.wlan1 del_client "{'addr':'14:d1:69:15:2a:d3', 'reason':5, 'deauth':false, 'ban_time':10000}"
-ubus call hostapd.wlan1 del_client "{'addr':'50:3e:aa:9f:2e:49', 'reason':5, 'deauth':false, 'ban_time':10000}"
-ubus call hostapd.wlan1 del_client "{'addr':'2e:13:1d:c1:24:9c', 'reason':5, 'deauth':false, 'ban_time':10000}"
+# ubus call hostapd.wlan1 del_client "{'addr':'14:d1:69:15:2a:d3', 'reason':5, 'deauth':false, 'ban_time':10000}"
+# ubus call hostapd.wlan1 del_client "{'addr':'50:3e:aa:9f:2e:49', 'reason':5, 'deauth':false, 'ban_time':10000}"
+# ubus call hostapd.wlan1 del_client "{'addr':'2e:13:1d:c1:24:9c', 'reason':5, 'deauth':false, 'ban_time':10000}"
