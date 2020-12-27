@@ -140,6 +140,17 @@ def process_help_command(message):
 			answ = os.popen(atq).read()
 			atrm  = "atrm " + str(answ)
 			os.system(atrm)
+
+			badList = ef.getListMacsFromFirewall("option name 'Gera'\n");
+
+			UBUS = "ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':100000}\""
+
+			for item in badList:
+
+				print(UBUS % item.lower())
+				os.system(UBUS % item.lower())
+
+
 		else:
 			bot.send_message(message.from_user.id, text = u'Интернет уже выключен')
 	else:
