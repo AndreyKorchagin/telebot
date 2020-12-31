@@ -40,11 +40,11 @@ def check(mode):
 			content.pop(block)
 
 			f = open("/root/test", "a")
-			for item in ef.getListMacsFromFirewall("option name 'Gera'\n"):
-				print("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':100000}\"" % item.lower())
+			for item in ef.getListMacsFromFirewall("\toption name 'Gera'"):
+				print("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':10000}\"" % item.lower())
 				
-				firewall = f.write("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':100000}\"\n" % item.lower())
-				os.system("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':100000}\"" % item.lower())
+				firewall = f.write("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':10000}\"\n" % item.lower())
+				os.system("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':10000}\"" % item.lower())
 			f.close()
 		else:
 			content.insert(block, str2[0])

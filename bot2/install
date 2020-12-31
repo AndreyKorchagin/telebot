@@ -2,5 +2,5 @@
 opkg update
 opkg install python-light python-pip
 echo "* * * * * /root/telebot/bot2/tg_check_down.sh &" >> /etc/crontabs/root
-/etc/inti.d/cron start
-/etc/inti.d/cron enable
+/etc/init.d/cron start
+/etc/init.d/cron enable
