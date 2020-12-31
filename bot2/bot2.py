@@ -141,8 +141,8 @@ def process_help_command(message):
 			atrm  = "atrm " + str(answ)
 			os.system(atrm)
 
-			# badList = ef.getListMacsFromFirewall("option name 'Gera'\n");
-			badList = ef.getListMacsFromFirewall("\toption name 'Gera'");
+			badList = ef.getListMacsFromFirewall("option name 'Gera'\n");
+			# badList = ef.getListMacsFromFirewall("\toption name 'Gera'");
 			UBUS = "ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':10000}\""
 
 			for item in badList:
@@ -210,8 +210,8 @@ def process_get_network_clients_list_commadn(message):
 
 		string = u'Список плохих пользователей:\n'
 
-		# listMacsFromFirewall = ef.getListMacsFromFirewall("option name 'Gera'\n")
-		listMacsFromFirewall = ef.getListMacsFromFirewall("\toption name 'Gera'")
+		listMacsFromFirewall = ef.getListMacsFromFirewall("option name 'Gera'\n")
+		# listMacsFromFirewall = ef.getListMacsFromFirewall("\toption name 'Gera'")
 		for i in range(0, len(listMacsFromFirewall)):
 			item = listMacsFromFirewall[i]
 			string = u'%s%d: %s\n' % (string, i + 1, item)
@@ -237,8 +237,8 @@ def process_get_network_clients_list_commadn(message):
 
 
 		list1 = ef.getConnections()
-		list2 = ef.getListMacsFromFirewall("\toption name 'Gera'")
-		# list2 = ef.getListMacsFromFirewall("option name 'Gera'\n")
+		# list2 = ef.getListMacsFromFirewall("\toption name 'Gera'")
+		list2 = ef.getListMacsFromFirewall("option name 'Gera'\n")
 
 
 		print("1:")

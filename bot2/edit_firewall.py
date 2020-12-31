@@ -17,7 +17,8 @@ def getListMacsFromFirewall(string):
 	listFromBlock = []
 
 	for i in range(0, len(blocks)):
-		block = blocks[i].split("\n")
+		block = blocks[i].split("\t")
+		print(block)
 		for j in range(0, len(block)):
 			if string in block[j]:
 				listFromBlock = blocks[i].split("\n")
@@ -35,7 +36,7 @@ def getListMacsFromFirewall(string):
 
 if __name__ == '__main__':
 	getConnections()
-	print(getListMacsFromFirewall("\toption name 'Gera'"))
+	print(getListMacsFromFirewall("option name 'Gera'\n"))
 
 
 

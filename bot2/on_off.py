@@ -40,7 +40,7 @@ def check(mode):
 			content.pop(block)
 
 			f = open("/root/test", "a")
-			for item in ef.getListMacsFromFirewall("\toption name 'Gera'"):
+			for item in ef.getListMacsFromFirewall("option name 'Gera'\n"):
 				print("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':10000}\"" % item.lower())
 				
 				firewall = f.write("ubus call hostapd.wlan1 del_client \"{\'addr\':'%s', \'reason\':5, \'deauth\':false, \'ban_time\':10000}\"\n" % item.lower())
