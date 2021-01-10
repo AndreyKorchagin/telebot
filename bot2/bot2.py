@@ -29,7 +29,7 @@ def add_ssh_pub_to_tmp(key):
 	f.close
 
 def check_add_ssh_pub():
-	return os.popen("/root/telebot/bot2/check_add_ssh_pub.sh").read()
+	return os.popen("sh /root/telebot/bot2/check_add_ssh_pub.sh").read()
 
 @bot.message_handler(commands=['start'])
 def process_start_command(message):
