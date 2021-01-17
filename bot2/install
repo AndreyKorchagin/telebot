@@ -1,6 +1,6 @@
 #!/bin/sh
 opkg update
-opkg install python-light python-pip openssh-sftp-server
+opkg install python-light python-pip openssh-sftp-server at
 echo "* * * * * /root/telebot/bot2/tg_check_down.sh &" >> /etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
